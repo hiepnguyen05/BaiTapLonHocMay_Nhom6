@@ -21,8 +21,6 @@
     <li>Lưu mô hình và vectorizer bằng <code>joblib</code>.</li>
   </ol>
 
-  <h3>Hình ảnh kết quả huấn luyện</h3>
-  <img src="images/training_results.png" alt="Kết quả huấn luyện" width="600">
 
   <h2>2. Ứng dụng Web phân loại tin nhắn</h2>
   <p>Ứng dụng được xây dựng bằng <strong>Flask</strong>. Người dùng có thể nhập tin nhắn để phân loại.</p>
