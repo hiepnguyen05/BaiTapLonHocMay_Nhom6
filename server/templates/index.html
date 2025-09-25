@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ phân loại tin nhắn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --blue: #3498db;
+            --light-blue: #5DADE2;
+            --white: #ffffff;
+            --dark: #2c3e50;
+            --gray: #ecf0f1;
+            --red: #e74c3c;
+            --green: #2ecc71;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--gray);
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid #dcdfe6;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            color: var(--dark);
+            font-weight: 700;
+            margin: 0 10px;
+        }
+
+        .header .bi {
+            font-size: 2.5rem;
+            color: var(--blue);
+        }
+
+        p.description {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        #message-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 150px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        textarea:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+            outline: none;
+        }
+
+        button {
+            background-color: var(--blue);
+            color: var(--white);
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            background-color: var(--light-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- CSS for the Modal Pop-up --- */
+        .modal {
+            display: none;
+            /* Ẩn theo mặc định */
+            position: fixed;
+            z-index: 1000;
+            /* Đặt lớp trên cùng */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Lớp phủ mờ */
+            justify-content: center;
+            align-items: center;
+            animation: fadeInOverlay 0.5s;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: modalSlideUp 0.5s;
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--dark);
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .modal-spam .modal-icon {
+            color: var(--red);
+        }
+
+        .modal-ham .modal-icon {
+            color: var(--green);
+        }
+
+        .modal-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--dark);
+        }
+
+        /* Animations */
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <i class="bi bi-shield-lock-fill"></i>
+            <h1>Phân loại tin nhắn</h1>
+        </div>
+        <p class="description">
+            Nhập tin nhắn vào ô dưới đây để kiểm tra xem đó có phải là tin nhắn spam hay không.
+        </p>
+        <form id="message-form" method="POST" action="/predict">
+            <textarea name="message" placeholder="Nhập tin nhắn tại đây..." required>{{ message }}</textarea>
+            <button type="submit">
+                <i class="bi bi-search"></i> Phân loại ngay
+            </button>
+        </form>
+    </div>
+
+    {% if prediction_text %}
+    <div id="predictionModal" class="modal">
+        <div class="modal-content 
+            {% if " Không phải" in prediction_text %}modal-ham{% else %}modal-spam{% endif %}">
+            <span class="close-btn">&times;</span>
+            <div class="modal-body">
+                {% if "Không phải" in prediction_text %}
+                <i class="bi bi-check-circle-fill modal-icon"></i>
+                <p class="modal-text">Đây là tin nhắn Không phải Spam</p>
+                {% else %}
+                <i class="bi bi-exclamation-triangle-fill modal-icon"></i>
+                <p class="modal-text">Đây là tin nhắn Spam</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        // Lấy các phần tử modal
+        var modal = document.getElementById("predictionModal");
+        var span = document.getElementsByClassName("close-btn")[0];
+
+        // Hiển thị modal nếu có kết quả dự đoán
+        if (modal) {
+            modal.style.display = "flex";
+        }
+
+        // Khi người dùng nhấp vào nút "x" (đóng), ẩn modal
+        if (span) {
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+        }
+
+        // Khi người dùng nhấp vào bất kỳ đâu ngoài modal, ẩn modal
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>
