@@ -33,11 +33,13 @@
   </ul>
 
   <h3>Giao diện minh họa</h3>
-  <img src="images/web_demo.png" alt="Giao diện web" width="600">
+  <img src="https://github.com/hiepnguyen05/BaiTapLonHocMay_Nhom6/blob/main/mainimg.png?raw=true" alt="Giao diện web" width="600">
+  <img src="https://github.com/hiepnguyen05/BaiTapLonHocMay_Nhom6/blob/main/ham.png?raw=true" alt="Giao diện web" width="600">
+  <img src="https://github.com/hiepnguyen05/BaiTapLonHocMay_Nhom6/blob/main/spam.png?raw=true" alt="Giao diện web" width="600">
 
   <h2>Cách chạy dự án</h2>
   <ol>
-    <li>Clone project: <code>git clone https://github.com/your-username/spam-message-classification.git</code></li>
+    <li>Clone project: <code>git clonehttps://github.com/hiepnguyen05/BaiTapLonHocMay_Nhom6</code></li>
     <li>Cài thư viện: <code>pip install -r requirements.txt</code></li>
     <li>Huấn luyện mô hình (nếu cần): chạy notebook huấn luyện.</li>
     <li>Chạy ứng dụng web: <code>python app.py</code></li>
